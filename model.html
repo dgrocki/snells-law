@@ -18,23 +18,69 @@
 <body>
 
 <p>
-<button onclick= "myMove()" >Click Me! </button>
+<!--
+<button onclick= "moveit(documet.getElementById("animate"),function(p) {return p} )" > Click Me! 
+</button>
+-->
+<button onclick = "moveit(document.getElementById("animate"),function(p) {return p})" > click me! </button>
+<!--<button onclick= "myMove()" > click me </button>
+-->
 </p>
 <div id ="container">
 <div id = "animate"></div>
 </div>
 
 <script>
+
+function animate(options){
+	var start = new date;	//date is start point
+	var id = setInterval(function(){	
+	var timePassed = new date - start;
+	var progress = timePassed /options.duration;	//duraton is how long animation will take
+
+	if (progress > 1) progress = 1	//progres is how much time passed / by duration
+
+	var delta = options.delta(progress)	//delta determines change each step
+	options.step(delta);
+
+	if (progress == 1){		//end animation
+		clearInterval(id)
+	}
+	}, options.delay || 10)
+
+
+
+
+}
+
+function moveit(elem,delta, duration){
+//	var elem = document.getElementById("animate");
+	
+	var pos = 0;
+	var options = {
+		delay: 10, 
+		duration: duration || 1000, 
+		delta: delta,
+		step: function(delta){
+			elem.style.left = pos*delta + 'px';
+			elem.style.top = pos*delta + 'px';
+		} }
+	animate(options);
+
+
+
+}
+
+
 function myMove() {
-	var elem =
-document.getElementById("animate");
+	var elem = document.getElementById("animate");
 	var pos =0;
-	var id = setInterval(frame,5);
+	var id = setInterval(frame,5); //draws every 5ms
 	function frame() {
-		if (pos == 350){
+		if (pos == 350){	//end conditon
 			clearInteval(id);
 	
-		}else{
+		}else{		
 			pos++;
 			elem.style.top= pos+ 'px';
 			elem.style.left = pos + 'px';
