@@ -1,24 +1,71 @@
 <!--changed some stuff -->
 <!DOCTYPE HTML>
 <html>
+
+<style>
+canvas {
+	border: 1px solid #d3d3d3;
+	background-color: #f1f1f1;
+}
+</style>
 <head>
 </head>
 
 
 
-<body>
-<canvas id ="box"
-width = "200" height = "100"
-style = "border:1px solid #000000;">
-</canvas>
-
+<body onload= "startMove()">
 
 <script>
-var canvas = document.getElementById("box");
-var ctx = canvas.getContext("2d");
-ctx.beginPath();
-ctx.arc(95,50,40,0,2*Math.PI);
-ctx.stroke();
+	var part;
+function startMove(){
+	part = new particle(10,10,"red", 10,10); //creates a particle
+	workArea.start();  //calls the start method of thsi object
+	
+}
+function particle(width, height, color, x,y){
+	this.width = width;
+	this.height = height;
+	this.x = x;
+	this.y = y;
+	
+	this.update = function(){ //create a function to draw my object
+/*		ctx = workArea.context;
+		ctx.fillStyle = color;
+		ctx.fillRect(this.x, this.y, this.width, this.height)	;	
+*/
+		ctx = workArea.context;
+		ctx.fillStyle = color;
+		ctx.beginPath();
+		ctx.arc(this.x,this.y,10,0,2*Math.PI);
+		ctx.fill();
+		ctx.stroke();
+
+	}
+}
+
+var workArea = {
+	canvas: document.createElement("canvas"),
+	start: function() {
+		this.canvas.width = 1000;
+		this.canvas.height = 500;
+		this.context = this.canvas.getContext("2d");
+		document.body.insertBefore(this.canvas,
+		document.body.childNodes[0]);
+		this.interval = setInterval(move, 20);
+	},
+	clear : function(){
+		this.context.clearRect(0,0,this.canvas.width, 
+			this.canvas.height);
+	}
+
+}
+
+function move(){
+	workArea.clear(); //clears the entire canvas
+	part.x += 1;
+	part.update(); //redraws the particle
+}
+
 
 
 </script>
