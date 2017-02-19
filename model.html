@@ -15,8 +15,28 @@ canvas {
 
 <body onload= "startMove()">
 
+<form id = "partNum">
+	Number of Particles: <input type="text"
+	name="userin" ><br>
+</form>
+
+<button onclick="display()" >click here</button>
 <script>
+	
+	var points = [];
 	var part;
+
+function display(){
+	var x = document.getElementById("partNum");
+	var i;
+	for (i = 0; i<x.length; i++){
+		points.push("new ob");
+		
+	}
+	document.getElementById("model").innerHTML = points;
+
+}
+
 function startMove(){
 	part = new particle(10,10,"red", 10,10); //creates a particle
 	workArea.start();  //calls the start method of thsi object
