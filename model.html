@@ -14,32 +14,36 @@ canvas {
 
 
 <body onload= "startMove()">
-
 <form id = "partNum">
 	Number of Particles: <input type="text"
 	name="userin" ><br>
 </form>
+<p id="me"></p>
 
 <button onclick="display()" >click here</button>
 <script>
 	
-	var points = [];
 	var part;
+	var points = [];
 
 function display(){
 	var x = document.getElementById("partNum");
 	var i;
-	for (i = 0; i<x.length; i++){
-		points.push("new ob");
+	var numberOfParticles = parseInt(x.elements[0].value);//access first element of input and turns it into an int
+	for (i = 0; i<numberOfParticles; i++){
+		part = new particle(10,10,"red", i*2, i*(20)*i);
+		points.push(part);
 		
 	}
-	document.getElementById("model").innerHTML = points;
-
+	document.getElementById("me").innerHTML = points;
+	workArea.start();  //calls the start method of thsi object
 }
 
 function startMove(){
-	part = new particle(10,10,"red", 10,10); //creates a particle
-	workArea.start();  //calls the start method of thsi object
+//	part = new particle(10,10,"red", 10,10); //creates a particle
+	
+	
+//	workArea.start();  //calls the start method of thsi object
 	
 }
 function particle(width, height, color, x,y){
@@ -81,9 +85,18 @@ var workArea = {
 }
 
 function move(){
+	var x = document.getElementById("partNum");
 	workArea.clear(); //clears the entire canvas
-	part.x += 1;
-	part.update(); //redraws the particle
+	//create array here of particles to update all of them//
+	var numberOfParticles = parseInt(x.elements[0].value);//access first element of input and turns it into an int
+	var i;
+//	part.x += 1;
+//	part.update();
+	for(i = 0; i < numberOfParticles; i++){
+		points[i].x+=1;
+		points[i].update(); //redraws the particle
+		
+	}
 }
 
 
@@ -94,5 +107,4 @@ function move(){
 </body>
 
 </html>
-
 
