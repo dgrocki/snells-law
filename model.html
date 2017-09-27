@@ -26,16 +26,75 @@ canvas {
 	var part;
 	var points = [];
 
+function perpLine(x){
+	var slope;
+	var yint;
+	this.equation = function(angle, yint){
+		this.slope = ((Math.tan(90-angle)));
+		this.yint = yint;
+		document.getElementById("me").innerHTML = this.slope;
+//		slope = (-1*(1/s1));
+	}
+	this.f1 = function(x,y){
+		return (this.slope*x);
+	
+	}
+
+
+
+}
+
 function display(){
+	var debug = [];
 	var x = document.getElementById("partNum");
 	var i;
 	var numberOfParticles = parseInt(x.elements[0].value);//access first element of input and turns it into an int
-	for (i = 0; i<numberOfParticles; i++){
-		part = new particle(10,10,"red", i*2, i*(20)*i);
-		points.push(part);
-		
+	var temp;
+	//WILL GET USER INPUT FOR THESE!!!!
+	var intervalSize = 200;		//What interval will the particles be evenly spaced over?
+	var angle = 1.2;			//how far below the x axis do you want to be?
+	var originx = 50;		//This is where we are centered around		we want half of the interval to be above and below this point.
+	var originy =50; 		//This is where we are centered around
+	var h = (intervalSize)/numberOfParticles;	//h is the distance between each point, depends on interval size and number of points
+	var f = new perpLine;
+	f.equation(angle, originy);
+	for(i = 0; i < numberOfParticles; i++){
+		debug.push(i);
+		if(i%2 == 0 ){
+//			debug.push("in the 1");
+			//temp = (i*h*Math.pow(-1,i));
+			temp = ((i/2)*h*Math.pow(-1,i));
+			debug.push(temp);
+			part = new particle(10,10, "red", originx-temp, originy - f.f1(temp),1);
+//			debug.push(originx+temp);
+//			debug.push(originy - f.f1(temp));
+			points.push(part);
+		}else{
+//			debug.push("in else");
+	//		temp = ( (i-(i-1)/2)*h*Math.pow(-1,i));
+			temp = (((i/2)+1)*h*Math.pow(-1,i));
+			
+			debug.push(temp);
+			part = new particle(10,10, "red", originx+temp, originy + f.f1(temp),1);
+			points.push(part);
+//			debug.push(originx+temp);
+//			debug.push(originy - f.f1(temp));
+		}
 	}
-	document.getElementById("me").innerHTML = points;
+
+/*	for (i = (originx-(intervalSize/2)); i<= (originx + (intervalSize/2)); i+= h){	//Start at the front of our interval, take our origin and subtract off half of the interval.
+	//incrememnt to the next x val in the interval with i +=h
+		part = new particle(10,10,"red", i, f.f1(-1*i), 1);
+		points.push(part);
+		if(h == 0){
+			break;
+		}
+
+		
+	}*/
+//	part = new particle(10,10,"green", 50, 50, 1);
+//	points.push(part);
+	document.getElementById("me").innerHTML = debug;
 	workArea.start();  //calls the start method of thsi object
 }
 
@@ -46,11 +105,14 @@ function startMove(){
 //	workArea.start();  //calls the start method of thsi object
 	
 }
-function particle(width, height, color, x,y){
+function particle(width, height, color, x,y, n1){
 	this.width = width;
 	this.height = height;
 	this.x = x;
 	this.y = y;
+	this.speed= n1;
+	this.angle = 0;
+	
 	
 	this.update = function(){ //create a function to draw my object
 /*		ctx = workArea.context;
@@ -64,6 +126,13 @@ function particle(width, height, color, x,y){
 		ctx.fill();
 		ctx.stroke();
 
+	}
+	this.changeSpeed = function(n){
+		this.speed = n;
+	}
+	this.pos = function(){
+		this.x += this.speed * Math.cos(this.angle);
+		this.y += this.speed * Math.sin(this.angle);
 	}
 }
 
@@ -93,7 +162,7 @@ function move(){
 //	part.x += 1;
 //	part.update();
 	for(i = 0; i < numberOfParticles; i++){
-		points[i].x+=1;
+		points[i].pos();
 		points[i].update(); //redraws the particle
 		
 	}
