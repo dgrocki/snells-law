@@ -51,10 +51,10 @@ function display(){
 	var numberOfParticles = parseInt(x.elements[0].value);//access first element of input and turns it into an int
 	var temp;
 	//WILL GET USER INPUT FOR THESE!!!!
-	var intervalSize = 200;		//What interval will the particles be evenly spaced over?
-	var angle = 1.2;			//how far below the x axis do you want to be?
-	var originx = 50;		//This is where we are centered around		we want half of the interval to be above and below this point.
-	var originy =50; 		//This is where we are centered around
+	var intervalSize = 50;		//What interval will the particles be evenly spaced over?
+	var angle = 45;			//how far below the x axis do you want to be?
+	var originx = 200;		//This is where we are centered around		we want half of the interval to be above and below this point.
+	var originy =200; 		//This is where we are centered around
 	var h = (intervalSize)/numberOfParticles;	//h is the distance between each point, depends on interval size and number of points
 	var f = new perpLine;
 	f.equation(angle, originy);
