@@ -34,6 +34,7 @@ function perpLine(x){
 		this.yint = yint;
 		document.getElementById("me").innerHTML = this.slope;
 //		slope = (-1*(1/s1));
+		
 	}
 	this.f1 = function(x,y){
 		return (this.slope*x);
@@ -43,7 +44,7 @@ function perpLine(x){
 
 
 }
-
+//distance = sqrt((x2-x1)sqr + (y2-y1)sqr)
 function display(){
 	var debug = [];
 	var x = document.getElementById("partNum");
@@ -51,21 +52,49 @@ function display(){
 	var numberOfParticles = parseInt(x.elements[0].value);//access first element of input and turns it into an int
 	var temp;
 	//WILL GET USER INPUT FOR THESE!!!!
-	var intervalSize = 50;		//What interval will the particles be evenly spaced over?
-	var angle = 45;			//how far below the x axis do you want to be?
-	var originx = 200;		//This is where we are centered around		we want half of the interval to be above and below this point.
-	var originy =200; 		//This is where we are centered around
-	var h = (intervalSize)/numberOfParticles;	//h is the distance between each point, depends on interval size and number of points
+	var intervalSize = 100;		//What interval will the particles be evenly spaced over?
+	var angle = 90;			//how far below the x axis do you want to be?
+	var originx = 100;		//This is where we are centered around		we want half of the interval to be above and below this point.
+	var originy =100; 		//This is where we are centered around
+	
+	var startx = 100;
+	var starty = 100;
+	var prevx = startx;
+	var prevy = starty;
+	var h = (intervalSize)/(numberOfParticles);	//h is the distance between each point, depends on interval size and number of points
+	
 	var f = new perpLine;
 	f.equation(angle, originy);
 	for(i = 0; i < numberOfParticles; i++){
+		//slope formula plugged into distance formula simplified thourgh qudratic forumula
+		/*
+		var a = (Math.pow(f.f1(1),2)+1);
+		var b =  (2*prevx+2*f.f1(1)*prevy);
+		var c = (Math.pow(prevx,2)+ Math.pow(prevy,2) - Math.pow(intervalSize,2));
+		var newx = b + Math.pow(Math.pow(b,2)-(4*a*c), .5);
+		newx = newx/(2*a);
+		var newy = f.f1(newx);
+		*/
+
+		var newx = Math.cos(angle)*h;
+		var newy = Math.sin(angle)*h;
+
+		part = new particle(10,10, "red", prevx-newx, prevy-newy,1);
+		points.push(part);
+		prevx += newx;
+		prevy -= newy;
+		debug.push(newx);
+		debug.push(newy);	
+
+
+/*
 		debug.push(i);
 		if(i%2 == 0 ){
 //			debug.push("in the 1");
 			//temp = (i*h*Math.pow(-1,i));
 			temp = ((i/2)*h*Math.pow(-1,i));
 			debug.push(temp);
-			part = new particle(10,10, "red", originx-temp, originy - f.f1(temp),1);
+			part = new particle(10,10, "red", originx-temp, originy + f.f1(temp),1);
 //			debug.push(originx+temp);
 //			debug.push(originy - f.f1(temp));
 			points.push(part);
@@ -75,14 +104,18 @@ function display(){
 			temp = (((i/2)+1)*h*Math.pow(-1,i));
 			
 			debug.push(temp);
-			part = new particle(10,10, "red", originx+temp, originy + f.f1(temp),1);
+			part = new particle(10,10, "red", originx+temp, originy - f.f1(temp),1);
 			points.push(part);
 //			debug.push(originx+temp);
 //			debug.push(originy - f.f1(temp));
 		}
+	*/
 	}
 
-/*	for (i = (originx-(intervalSize/2)); i<= (originx + (intervalSize/2)); i+= h){	//Start at the front of our interval, take our origin and subtract off half of the interval.
+
+/*	
+
+for (i = (originx-(intervalSize/2)); i<= (originx + (intervalSize/2)); i+= h){	//Start at the front of our interval, take our origin and subtract off half of the interval.
 	//incrememnt to the next x val in the interval with i +=h
 		part = new particle(10,10,"red", i, f.f1(-1*i), 1);
 		points.push(part);
@@ -92,8 +125,10 @@ function display(){
 
 		
 	}*/
+
 //	part = new particle(10,10,"green", 50, 50, 1);
 //	points.push(part);
+
 	document.getElementById("me").innerHTML = debug;
 	workArea.start();  //calls the start method of thsi object
 }
