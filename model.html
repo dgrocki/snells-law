@@ -53,7 +53,7 @@ function display(){
 	var temp;
 	//WILL GET USER INPUT FOR THESE!!!!
 	var intervalSize = 100;		//What interval will the particles be evenly spaced over?
-	var angle = 90;			//how far below the x axis do you want to be?
+	var angle = 45*Math.PI/180;			//how far below the x axis do you want to be?
 	var originx = 100;		//This is where we are centered around		we want half of the interval to be above and below this point.
 	var originy =100; 		//This is where we are centered around
 	
@@ -78,13 +78,16 @@ function display(){
 
 		var newx = Math.cos(angle)*h;
 		var newy = Math.sin(angle)*h;
-
-		part = new particle(10,10, "red", prevx-newx, prevy-newy,1);
+		
+		debug.push(newx/h);
+		part = new particle(10,10, "red", prevx-newx, prevy-newy,1,angle);
 		points.push(part);
 		prevx += newx;
 		prevy -= newy;
-		debug.push(newx);
-		debug.push(newy);	
+		//debug.push(newx);
+		//debug.push(newy);
+
+			
 
 
 /*
@@ -140,14 +143,13 @@ function startMove(){
 //	workArea.start();  //calls the start method of thsi object
 	
 }
-function particle(width, height, color, x,y, n1){
+function particle(width, height, color, x,y, n1, angle){
 	this.width = width;
 	this.height = height;
 	this.x = x;
 	this.y = y;
 	this.speed= n1;
-	this.angle = 0;
-	
+	this.angle = angle
 	
 	this.update = function(){ //create a function to draw my object
 /*		ctx = workArea.context;
@@ -166,8 +168,8 @@ function particle(width, height, color, x,y, n1){
 		this.speed = n;
 	}
 	this.pos = function(){
-		this.x += this.speed * Math.cos(this.angle);
-		this.y += this.speed * Math.sin(this.angle);
+		this.x += this.speed*Math.cos(this.angle);
+		this.y += this.speed*Math.sin(this.angle);
 	}
 }
 
@@ -197,6 +199,11 @@ function move(){
 //	part.x += 1;
 //	part.update();
 	for(i = 0; i < numberOfParticles; i++){
+		//check if we have reached the first threshold
+		if(points[i].x >= 300){
+			points[i].speed = .5
+		}
+
 		points[i].pos();
 		points[i].update(); //redraws the particle
 		
