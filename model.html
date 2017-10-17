@@ -25,6 +25,8 @@ canvas {
 	
 	var part;
 	var points = [];
+	var theta2;
+	var line =[];
 
 function perpLine(x){
 	var slope;
@@ -53,7 +55,13 @@ function display(){
 	var temp;
 	//WILL GET USER INPUT FOR THESE!!!!
 	var intervalSize = 100;		//What interval will the particles be evenly spaced over?
-	var angle = 45*Math.PI/180;			//how far below the x axis do you want to be?
+	
+	var angle = 80*Math.PI/180;			//how far below the x axis do you want to be? This value is theta1 for snells law
+	var theta1 = (Math.PI/2) - angle;
+	theta2 = Math.asin((.5/1)*Math.sin(theta1));
+
+	debug.push(theta2);	
+
 	var originx = 100;		//This is where we are centered around		we want half of the interval to be above and below this point.
 	var originy =100; 		//This is where we are centered around
 	
@@ -79,16 +87,19 @@ function display(){
 		var newx = Math.cos(angle)*h;
 		var newy = Math.sin(angle)*h;
 		
-		debug.push(newx/h);
 		part = new particle(10,10, "red", prevx-newx, prevy-newy,1,angle);
+		
 		points.push(part);
-		prevx += newx;
+	   	prevx += newx;
 		prevy -= newy;
 		//debug.push(newx);
 		//debug.push(newy);
 
 			
 
+		part = new particle(10,10,"red", 100, 100,0,angle);
+//		console.log(part.color)
+//		part.update();
 
 /*
 		debug.push(i);
@@ -149,7 +160,8 @@ function particle(width, height, color, x,y, n1, angle){
 	this.x = x;
 	this.y = y;
 	this.speed= n1;
-	this.angle = angle
+	this.angle = angle;
+	this.color = color;
 	
 	this.update = function(){ //create a function to draw my object
 /*		ctx = workArea.context;
@@ -168,8 +180,8 @@ function particle(width, height, color, x,y, n1, angle){
 		this.speed = n;
 	}
 	this.pos = function(){
-		this.x += this.speed*Math.cos(this.angle);
-		this.y += this.speed*Math.sin(this.angle);
+		this.x += this.speed*Math.sin(this.angle);
+		this.y += this.speed*Math.cos(this.angle);
 	}
 }
 
@@ -185,11 +197,10 @@ var workArea = {
 	},
 	clear : function(){
 		this.context.clearRect(0,0,this.canvas.width, 
-			this.canvas.height);
+		this.canvas.height);
 	}
 
 }
-
 function move(){
 	var x = document.getElementById("partNum");
 	workArea.clear(); //clears the entire canvas
@@ -198,10 +209,18 @@ function move(){
 	var i;
 //	part.x += 1;
 //	part.update();
+	var mid = Math.floor(numberOfParticles/2);
+	line.push(new particle(1,1, "green", points[mid].x, points[mid].y, 0, 0) );
+	var j;
+	for(j = 0; j< line.length; j++ ){
+		line[j].update();
+	}
+
 	for(i = 0; i < numberOfParticles; i++){
 		//check if we have reached the first threshold
 		if(points[i].x >= 300){
 			points[i].speed = .5
+			points[i].angle = (Math.PI/2)-theta2;
 		}
 
 		points[i].pos();
